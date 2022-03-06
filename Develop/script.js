@@ -6,19 +6,28 @@ var uppercases = false;
 var numerics = false;
 var specialchars = false;
 
+var lowerCaseArray = 'abcdefghijklmnopqrstuvwxyz';
+var upperCaseArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var numericArray = '0123456789';
+var specialCharArray = '!@#$%^&*()';
+
+// Select the desired length of the password
 var lengthSelect = function() {
-  var lengthprompt = window.prompt("Type your password length. It must be between 8 and 128.");
+  // Check to make sure the length hasn't already been set
+  if(passLength == 0) {
+    var lengthPrompt = window.prompt("Type your password length. It must be between 8 and 128.");
   // Store value to check
-  var parse = parseInt(lengthprompt);
-  var intCheck = Number.isInteger(parse);
+    var parse = parseInt(lengthPrompt);
+    var intCheck = Number.isInteger(parse);
   // Make sure the value is an integer to compare and is a valid length
-  if(intCheck && (parse >= 8) && (parse <= 128)) {
-      window.alert("Your password will be " + parse + " characters long.");
-      passLength = parse;
+    if(intCheck && (parse >= 8) && (parse <= 128)) {
+        window.alert("Your password will be " + parse + " characters long.");
+        passLength = parse;
           // Continue running code 
-  } else {
-      window.alert("Please enter a valid integer between 8 and 128.")
-      lengthSelect();
+    } else {
+        window.alert("Please enter a valid integer between 8 and 128.")
+        lengthSelect();
+    }
   }
 }
 
@@ -27,13 +36,42 @@ var caseSelect = function() {
   lowercases = lowCasePrompt;
   var upperCasePrompt = window.confirm("Would you like your password to include upper case letters?");
   uppercases = upperCasePrompt;
+  var numericPrompt = window.confirm("Would you like your password to include numeric values?");
+  numerics = numericPrompt;
+  var specialPrompt = window.confirm("Would you like your password to contain special characters?");
+  specialchars = specialPrompt;
 }
 
 var generatePassword = function() {
   lengthSelect();
   caseSelect();
-  console.log("Length: " + passLength + ". Lower cases: " + lowercases + ". Upper cases: " + uppercases);
-}
+  // check that at least one value is true
+    if(lowercases || uppercases || numerics || specialchars) {
+      var conditions = [];
+      var pass = '';
+      if(lowercases) {
+        conditions.push(lowerCaseArray);
+      }
+      if(uppercases) {
+        conditions.push(upperCaseArray);
+      }
+      if(numerics) {
+        conditions.push(numericArray);
+      }
+      if(specialchars) {
+        conditions.push(specialCharArray);
+      }
+      for(i = 0; i < passLength; i++) {
+        var newCharArrayNum = Math.floor(Math.random() * conditions.length);
+        var newCharArray = conditions[newCharArrayNum];
+        pass += newCharArray[Math.floor(Math.random() * newCharArray.length)];
+      }
+      return pass;
+    } else {
+      window.alert("You must select at least one value.");
+      generatePassword();
+    }
+  }
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
@@ -44,7 +82,6 @@ function writePassword() {
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
-
 }
 
 // Add event listener to generate button
