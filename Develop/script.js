@@ -11,11 +11,15 @@ var upperCaseArray = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var numericArray = '0123456789';
 var specialCharArray = '!@#$%^&*()';
 
+var conditions = [];
+var pass = '';
+
 // Select the desired length of the password
 var lengthSelect = function() {
-  // Check to make sure the length hasn't already been set
-  if(passLength == 0) {
-    var lengthPrompt = window.prompt("Type your password length. It must be between 8 and 128.");
+  // Reset our password specifications
+  conditions = [];
+  pass = '';
+  var lengthPrompt = window.prompt("Type your password length. It must be between 8 and 128.");
   // Store value to check
     var parse = parseInt(lengthPrompt);
     var intCheck = Number.isInteger(parse);
@@ -28,7 +32,7 @@ var lengthSelect = function() {
         window.alert("Please enter a valid integer between 8 and 128.")
         lengthSelect();
     }
-  }
+  
 }
 
 var caseSelect = function() {
@@ -40,38 +44,38 @@ var caseSelect = function() {
   numerics = numericPrompt;
   var specialPrompt = window.confirm("Would you like your password to contain special characters?");
   specialchars = specialPrompt;
+  if(lowercases || uppercases || numerics || specialchars) {
+      
+    if(lowercases) {
+      conditions.push(lowerCaseArray);
+    }
+    if(uppercases) {
+      conditions.push(upperCaseArray);
+    }
+    if(numerics) {
+      conditions.push(numericArray);
+    }
+    if(specialchars) {
+      conditions.push(specialCharArray);
+    } 
+  } else {
+    window.alert("You must select at least one value.");
+    caseSelect();
+  }
 }
 
 var generatePassword = function() {
   lengthSelect();
   caseSelect();
-  // check that at least one value is true
-    if(lowercases || uppercases || numerics || specialchars) {
-      var conditions = [];
-      var pass = '';
-      if(lowercases) {
-        conditions.push(lowerCaseArray);
-      }
-      if(uppercases) {
-        conditions.push(upperCaseArray);
-      }
-      if(numerics) {
-        conditions.push(numericArray);
-      }
-      if(specialchars) {
-        conditions.push(specialCharArray);
-      }
-      for(i = 0; i < passLength; i++) {
-        var newCharArrayNum = Math.floor(Math.random() * conditions.length);
-        var newCharArray = conditions[newCharArrayNum];
-        pass += newCharArray[Math.floor(Math.random() * newCharArray.length)];
-      }
-      return pass;
-    } else {
-      window.alert("You must select at least one value.");
-      generatePassword();
-    }
+  
+  for(i = 0; i < passLength; i++) {
+    var newCharArrayNum = Math.floor(Math.random() * conditions.length);
+    var newCharArray = conditions[newCharArrayNum];
+    pass += newCharArray[Math.floor(Math.random() * newCharArray.length)];
   }
+    return pass;
+  }
+  
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
