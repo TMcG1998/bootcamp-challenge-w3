@@ -67,8 +67,17 @@ var caseSelect = function() {
 var generatePassword = function() {
   lengthSelect();
   caseSelect();
-  
-  for(i = 0; i < passLength; i++) {
+  // Copy our array to help the while loop
+  var conditionsCopy = [...conditions];
+  // Ensure at least 1 of each desired character type is there
+  while(conditionsCopy.length > 0) {
+    var newCharArrayNum = Math.floor(Math.random() * conditionsCopy.length);
+    var newCharArray = conditionsCopy[newCharArrayNum];
+    pass += newCharArray[Math.floor(Math.random() * newCharArray.length)];
+    conditionsCopy.splice(newCharArrayNum, 1);
+  }
+  // Generate rest of password
+  for(i = 0; i < (passLength - conditions.length); i++) {
     var newCharArrayNum = Math.floor(Math.random() * conditions.length);
     var newCharArray = conditions[newCharArrayNum];
     pass += newCharArray[Math.floor(Math.random() * newCharArray.length)];
