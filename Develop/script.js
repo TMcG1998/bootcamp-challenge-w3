@@ -35,6 +35,7 @@ var lengthSelect = function() {
   
 }
 
+// Allow users to choose their password's criteria
 var caseSelect = function() {
   var lowCasePrompt = window.confirm("Would you like your password to include lower case letters?");
   lowercases = lowCasePrompt;
@@ -44,6 +45,7 @@ var caseSelect = function() {
   numerics = numericPrompt;
   var specialPrompt = window.confirm("Would you like your password to contain special characters?");
   specialchars = specialPrompt;
+  // Verify at least one value has been picked for the password
   if(lowercases || uppercases || numerics || specialchars) {
       
     if(lowercases) {
@@ -64,6 +66,7 @@ var caseSelect = function() {
   }
 }
 
+// Create our password using the previously selected criteria and have it displayed to the webpage
 var generatePassword = function() {
   lengthSelect();
   caseSelect();
